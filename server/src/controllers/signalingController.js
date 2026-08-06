@@ -26,10 +26,19 @@ function handleIceCandidate(socket, data) {
         );
 
 }
+function handleEndCall(socket, data) {
 
+  socket
+    .to(data.sessionId)
+    .emit("call-ended");
+
+}
 
 module.exports = {
-    handleOffer,
-    handleAnswer,
-    handleIceCandidate
+  handleOffer,
+  handleAnswer,
+  handleIceCandidate,
+  handleEndCall
 };
+
+

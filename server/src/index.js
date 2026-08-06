@@ -17,7 +17,10 @@ const io = new Server(
   server,
   {
     cors: {
-      origin: "*",
+       origin:[
+      "https://your-frontend-domain.com"
+    ],
+    methods:["GET","POST"]
     },
   }
 );
@@ -39,7 +42,7 @@ io.on(
 );
 
 server.listen(
-  5000,
+  process.env.PORT || 5000,
   () =>
     console.log(
       "running"
