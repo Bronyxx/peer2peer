@@ -1,6 +1,6 @@
 import { useState,useRef, useEffect } from 'react'
 import {socket} from './socket.js'
-import useCallDuration from "./hooks/CallDuration.js";
+import useCallDuration from "./hooks/callDuration.js";
 import SessionSummary from "./components/sessionSummary.jsx";
 
 
