@@ -4,7 +4,7 @@ const {
 
 const {
   tryMatch,
-} = require("../services/matchmakingService");
+} = require("../services/matchMakingService");
 
 function handleJoinQueue(
   io,
