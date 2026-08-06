@@ -18,7 +18,7 @@ const io = new Server(
   {
     cors: {
        origin:[
-      "https://your-frontend-domain.com"
+      "peer2peer-ebon.vercel.app"
     ],
     methods:["GET","POST"]
     },
