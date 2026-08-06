@@ -4,9 +4,21 @@ const {
   "../controllers/queueController"
 );
 const {
+  findSessionBySocket
+} = require(
+  "../services/disconnectService"
+);
+
+const {
+  sessions
+} = require(
+  "../store/sessionStore"
+);
+const {
  handleOffer,
  handleAnswer,
- handleIceCandidate
+ handleIceCandidate,
+ handleEndCall
 } = require("../controllers/signalingController");
 
 function registerSocketHandlers(
@@ -57,6 +69,41 @@ socket.on(
     }
 );
 
+socket.on(
+  "end-call",
+  (data) => {
+    handleEndCall(socket, data);
+  }
+);
+
+socket.on(
+  "disconnect",
+  () => {
+
+    console.log(
+      "Disconnected:",
+      socket.id
+    );
+
+    const result =
+      findSessionBySocket(
+        socket.id
+      );
+
+    if (!result) return;
+
+    io.to(
+      result.sessionId
+    ).emit(
+      "peer-disconnected"
+    );
+
+    sessions.delete(
+      result.sessionId
+    );
+
+  }
+);
 
 }
 
