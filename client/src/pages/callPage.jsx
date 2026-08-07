@@ -1,7 +1,7 @@
  import { useState, useRef, useEffect } from "react";
 import { socket } from "../socket.js";
- import useCallDuration from "./hooks/callDuration.js";
-import SessionSummary from "./components/sessionSummary.jsx";
+ import useCallDuration from "../hooks/callDuration.js";
+import SessionSummary from "../components/sessionSummary.jsx";
  
  export default function CallPage(){
  
