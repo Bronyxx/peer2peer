@@ -83,6 +83,23 @@ const createPeer = () => {
 
   
 };
+{/*mute toggle*/} 
+const toggleMute = () => {
+
+  const audioTrack =
+    localStreamRef.current
+      ?.getAudioTracks()[0];
+
+  if (!audioTrack) return;
+
+  audioTrack.enabled =
+    !audioTrack.enabled;
+
+  setIsMuted(
+    !audioTrack.enabled
+  );
+
+};
 
 // end call
 const cleanupCall = (reason) => {
@@ -356,6 +373,12 @@ const handlePeerDisconnect =
  )}
 
 {status=== "connected" &&(
+    <>
+     <button onClick={toggleMute}>
+      {isMuted
+        ? " Unmute"
+        : " Mute"}
+    </button>
 <button
   onClick={() => {
 
@@ -372,9 +395,13 @@ const handlePeerDisconnect =
 >
   End Call
 </button>
+</>
    )}
+   </>
+   )}
+
     
   
-     </>
-   );
-}
+     
+   
+   
