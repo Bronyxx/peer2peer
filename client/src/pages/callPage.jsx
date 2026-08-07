@@ -11,6 +11,7 @@ import SessionSummary from "../components/sessionSummary.jsx";
    const [sessionId, setSessionId] = useState(null);
    const [sessionStats, setSessionStats] =useState(null);
   const [status, setStatus] = useState("idle");
+  const [isMuted, setIsMuted] = useState(false);
    const remoteVideoRef = useRef(null);
    const peerRef = useRef(null);
    const localStreamRef = useRef(null);
