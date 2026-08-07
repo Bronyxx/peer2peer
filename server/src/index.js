@@ -3,6 +3,7 @@ const express =require("express");
 const http = require("http");
 
 const { Server } =require("socket.io");
+ const cors = require("cors");
 
 const {registerSocketHandlers,} = require("./sockets/socketHandlers");
 
@@ -12,15 +13,24 @@ app.get("/", (req, res) => {
 });
 const server =
   http.createServer(app);
+ 
+
+app.use(
+  cors({
+    origin: "https://peer2peer-ebon.vercel.app",
+    credentials: true
+  })
+);
 
 const io = new Server(
   server,
   {
     cors: {
        origin:[
-      "peer2peer-ebon.vercel.app"
+      "https://peer2peer-ebon.vercel.app"
     ],
-    methods:["GET","POST"]
+    methods:["GET","POST"],
+    credentials:true,
     },
   }
 );
