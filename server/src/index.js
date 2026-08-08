@@ -2,12 +2,16 @@ const express =require("express");
 
 const http = require("http");
 
+
 const { Server } =require("socket.io");
  const cors = require("cors");
+ const app = express();
+ app.use(express.json());
+
 
 const {registerSocketHandlers,} = require("./sockets/socketHandlers");
 
-const app = express();
+
 app.get("/", (req, res) => {
   res.send("Peer Support Backend Running");
 });
@@ -34,6 +38,10 @@ const io = new Server(
     },
   }
 );
+const metrics = {
+  attempts: 0,
+  successful: 0
+};
 
 io.on(
   "connection",
@@ -48,8 +56,41 @@ io.on(
       io,
       socket
     );
+
+    socket.on("call-connected",() => {
+    metrics.successful++;
   }
 );
+  }
+
+  
+);
+app.get(
+  "/metrics",
+  (req,res)=>{
+
+    const rate =
+      metrics.attempts === 0
+        ? 0
+        : (
+            metrics.successful /
+            metrics.attempts
+          ) * 100;
+
+    res.json({
+      attempts:
+        metrics.attempts,
+
+      successful:
+        metrics.successful,
+
+      successRate:
+        rate.toFixed(2)
+    });
+
+  }
+);
+
 
 server.listen(
   process.env.PORT || 5000,
