@@ -15,6 +15,7 @@ import SessionSummary from "../components/sessionSummary.jsx";
    const remoteVideoRef = useRef(null);
    const peerRef = useRef(null);
    const localStreamRef = useRef(null);
+   const matchTimerRef = useRef(null);
 
 //new peer connection
 const createPeer = () => {
@@ -67,6 +68,10 @@ const createPeer = () => {
     "Connection State:",
     peer.connectionState
   );
+  console.log(
+    "ICE State:",
+    peer.iceConnectionState
+  );
 
   if (
     peer.connectionState === "failed" ||
@@ -75,6 +80,13 @@ const createPeer = () => {
 
     cleanupCall("connection lost");
 
+  }
+ if (peer.connectionState === "connected"){
+   socket.emit(
+      "call-connected",{
+    sessionId
+  }
+    );
   }
 
 };
@@ -141,6 +153,7 @@ setSessionStats({
 
 
     const joinAsSeeker = () => {
+      matchTimerRef.current = Date.now();
       setStatus("searching");
     socket.emit("join-queue", { 
       role: "seeker",
@@ -149,6 +162,7 @@ setSessionStats({
   };
 
   const joinAsListener = () => {
+     matchTimerRef.current = Date.now();
     setStatus("searching");
     socket.emit("join-queue", {
       role: "listener",
@@ -180,6 +194,10 @@ setSessionStats({
   useEffect(() => {
 
   const handleMatch = (data) => {
+  const latency =Date.now() - matchTimerRef.current;
+  
+
+console.log("Matchmaking Latency:",latency,"ms");
 
     console.log("MATCH FOUND:", data);
 
@@ -220,6 +238,8 @@ useEffect(() => {
     answer,
   });
   setStatus("connected");
+ 
+ 
   start();
 
 };
