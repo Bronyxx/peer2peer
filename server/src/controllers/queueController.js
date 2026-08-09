@@ -1,10 +1,7 @@
-const {
-  addToQueue,
-} = require("../services/queueService");
+const {addToQueue} = require("../services/queueService");
 
-const {
-  tryMatch,
-} = require("../services/matchMakingService");
+const {tryMatch} = require("../services/matchMakingService");
+const metrics = require("../store/metricsStore.js");
 
 function handleJoinQueue(
   io,
@@ -26,6 +23,7 @@ function handleJoinQueue(
     tryMatch();
 
   if (!match) return;
+  metrics.attempts++;
   //room join 
   const seekerSocket =
   io.sockets.sockets.get(

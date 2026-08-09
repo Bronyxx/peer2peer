@@ -1,6 +1,7 @@
 const express =require("express");
 
 const http = require("http");
+const metrics = require("./store/metricStore.js");
 
 
 const { Server } =require("socket.io");
@@ -25,7 +26,7 @@ app.use(
     credentials: true
   })
 );
-
+const connectedSessions = new Set(); // for checking the connected sessions
 const io = new Server(
   server,
   {
@@ -38,10 +39,7 @@ const io = new Server(
     },
   }
 );
-const metrics = {
-  attempts: 0,
-  successful: 0
-};
+
 
 io.on(
   "connection",
@@ -57,10 +55,11 @@ io.on(
       socket
     );
 
-    socket.on("call-connected",() => {
-    metrics.successful++;
-  }
-);
+    socket.on("call-connected",({sessionId}) => {
+      connectedSessions.add(sessionId);
+      metrics.successful++;
+          console.log("Successful session:",sessionId);
+    });
   }
 
   
