@@ -8,6 +8,7 @@ const {
 } = require(
   "../services/disconnectService"
 );
+const {removeFromQueue}= require("../services/queueService.js");
 
 const {
   sessions
@@ -84,6 +85,7 @@ socket.on(
       "Disconnected:",
       socket.id
     );
+    removeFromQueue(socket.id)
 
     const result =
       findSessionBySocket(
