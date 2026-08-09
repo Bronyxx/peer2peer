@@ -54,7 +54,7 @@ const createPeer = () => {
   peer.onicecandidate = (event) => {
 
     if (!event.candidate) return;
-
+console.log("Emitting ICE candidate with sessionId:", sessionId);
     socket.emit("ice-candidate", {
       sessionId,
       candidate: event.candidate,
@@ -290,6 +290,17 @@ const handlePeerDisconnect =
   socket.on("answer", handleAnswer);
   socket.on("ice-candidate", handleIce);
   socket.on("peer-disconnected",handlePeerDisconnect);
+  socket.on("disconnect", reason => {
+  console.log("SOCKET DISCONNECTED:", reason);
+});
+
+socket.on("connect", () => {
+  console.log("SOCKET CONNECTED:", socket.id);
+});
+
+socket.on("connect_error", err => {
+  console.log("CONNECT ERROR:", err);
+});
 
   return () => {
 
