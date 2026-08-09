@@ -76,6 +76,9 @@ app.get(
             metrics.attempts
           ) * 100;
 
+
+          const avgMatchLatency =metrics.matchmakingCount === 0? 0: (metrics.totalMatchmakingLatency / metrics.matchmakingCount);
+
     res.json({
       attempts:
         metrics.attempts,
@@ -84,7 +87,13 @@ app.get(
         metrics.successful,
 
       successRate:
-        rate.toFixed(2)
+        rate.toFixed(2),
+
+        matches:
+    metrics.matchmakingCount,
+
+  avgMatchLatency:
+    avgMatchLatency.toFixed(2)
     });
 
   }

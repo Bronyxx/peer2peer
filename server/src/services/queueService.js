@@ -8,13 +8,13 @@ function addToQueue(socketId, role) {
   if (role === "seeker") {
 
     if (!seekers.includes(socketId)) {
-      seekers.push(socketId);
+      seekers.push({socketId,joinedAt: Date.now()});
     }
   }
 
   if (role === "listener") {
     if (!listeners.includes(socketId)) {
-      listeners.push(socketId);
+      listeners.push({socketId,joinedAt: Date.now()});
     }
   }
 }
