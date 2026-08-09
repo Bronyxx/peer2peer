@@ -16,6 +16,7 @@ import SessionSummary from "../components/sessionSummary.jsx";
    const peerRef = useRef(null);
    const localStreamRef = useRef(null);
    const matchTimerRef = useRef(null);
+   const sessionIdRef = useRef(null);
 
 //new peer connection
 const createPeer = () => {
@@ -56,7 +57,7 @@ const createPeer = () => {
     if (!event.candidate) return;
 console.log("Emitting ICE candidate with sessionId:", sessionId);
     socket.emit("ice-candidate", {
-      sessionId,
+      sessionId:sessionIdRef.current,
       candidate: event.candidate,
     });
 
@@ -84,7 +85,7 @@ console.log("Emitting ICE candidate with sessionId:", sessionId);
  if (peer.connectionState === "connected"){
    socket.emit(
       "call-connected",{
-    sessionId
+    sessionId: sessionIdRef.current
   }
     );
   }
@@ -169,7 +170,9 @@ setSessionStats({
     });
   };
 
-
+   useEffect(()=>{
+    sessionIdRef.current = sessionId;
+   },[sessionId]) 
 
    useEffect(()=>{
     async function startCamera(){
