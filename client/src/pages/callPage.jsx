@@ -55,7 +55,7 @@ const createPeer = () => {
   peer.onicecandidate = (event) => {
 
     if (!event.candidate) return;
-console.log("Emitting ICE candidate with sessionId:", sessionId);
+console.log("Emitting ICE candidate with sessionId:", sessionIdRef.current);
     socket.emit("ice-candidate", {
       sessionId:sessionIdRef.current,
       candidate: event.candidate,
