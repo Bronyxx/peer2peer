@@ -1,7 +1,7 @@
 const {addToQueue} = require("../services/queueService");
 
 const {tryMatch} = require("../services/matchMakingService");
-const metrics = require("../store/metricsStore.js");
+const metrics = require("../store/metricStore.js");
 
 function handleJoinQueue(
   io,
