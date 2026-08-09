@@ -26,8 +26,10 @@ console.log("Listeners:", listeners);
   const sessionId =
     crypto.randomUUID();
     const latency =Date.now() -Math.min(seeker.joinedAt,listener.joinedAt);
+    console.log("Before matchmaking", metrics.matchmakingCount,metrics.totalMatchmakingLatency);
     metrics.matchmakingCount++;
     metrics.totalMatchmakingLatency += latency;
+    console.log("after matchmaking", metrics.matchmakingCount,metrics.totalMatchmakingLatency);
 
 console.log(
   "Matchmaking latency:",

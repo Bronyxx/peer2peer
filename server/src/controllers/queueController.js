@@ -23,7 +23,9 @@ function handleJoinQueue(
     tryMatch();
 
   if (!match) return;
+  console.log("before metrics.attempts:", metrics.attempts);
   metrics.attempts++;
+  console.log("after metrics.attempts:", metrics.attempts);
   //room join 
   const seekerSocket =
   io.sockets.sockets.get(
