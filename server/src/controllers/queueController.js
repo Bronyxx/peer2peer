@@ -36,6 +36,8 @@ const listenerSocket =
   io.sockets.sockets.get(
     match.listener
   );
+  console.log("match object:", JSON.stringify(match));
+ console.log("typeof match.seeker:", typeof match.seeker);
 
 seekerSocket.join(
   match.sessionId
