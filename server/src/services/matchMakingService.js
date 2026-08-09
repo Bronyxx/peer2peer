@@ -44,8 +44,8 @@ console.log(
 
   return {
     sessionId,
-    seeker,
-    listener,
+    seeker: seeker.socketId,
+    listener: listener.socketId,
   };
 }
 
