@@ -69,6 +69,7 @@ console.log("Emitting ICE candidate with sessionId:", sessionIdRef.current);
     "Connection State:",
     peer.connectionState
   );
+    window.__webrtcState = peer.connectionState; 
   console.log(
     "ICE State:",
     peer.iceConnectionState
