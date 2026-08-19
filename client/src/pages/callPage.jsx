@@ -2,7 +2,7 @@
 import { socket } from "../socket.js";
  import useCallDuration from "../hooks/callDuration.js";
 import SessionSummary from "../components/sessionSummary.jsx";
-import "callPage.css";
+import "./callPage.css";
  
  export default function CallPage(){
  
