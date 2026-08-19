@@ -2,6 +2,7 @@
 import { socket } from "../socket.js";
  import useCallDuration from "../hooks/callDuration.js";
 import SessionSummary from "../components/sessionSummary.jsx";
+import "callPage.css";
  
  export default function CallPage(){
  
@@ -17,6 +18,7 @@ import SessionSummary from "../components/sessionSummary.jsx";
    const localStreamRef = useRef(null);
    const matchTimerRef = useRef(null);
    const sessionIdRef = useRef(null);
+   const [isLocalExpanded, setIsLocalExpanded] = useState(false);
 
 //new peer connection
 const createPeer = () => {
@@ -74,7 +76,7 @@ console.log("Emitting ICE candidate with sessionId:", sessionIdRef.current);
     "ICE State:",
     peer.iceConnectionState
   );
-
+ 
   if (
     peer.connectionState === "failed" ||
     peer.connectionState === "closed"
@@ -323,19 +325,33 @@ socket.on("connect_error", err => {
 
    return (
     <>
+<div className="video-container">
     // user camera
     <video
-  ref={videoRef}
-  autoPlay
-  playsInline
-  muted
-/>
-// remote camera
-<video
-  ref={remoteVideoRef}
-  autoPlay
-  playsInline
-/>
+     ref={videoRef}
+     autoPlay
+     playsInline
+     muted
+     className={isLocalExpanded? "local-video expanded" : "local-video"}
+     
+    />
+    // remote camera
+    <video
+      ref={remoteVideoRef}
+      autoPlay
+      playsInline
+       className="remote-video"
+    />
+</div>
+ <button
+    className="resize-button"
+    onClick={() =>
+      setIsLocalExpanded(prev => !prev)
+    }
+  >
+    ⛶
+  </button>
+
       <button onClick={joinAsSeeker}
        disabled={status !== "idle" && status !== "ended"}>
         Need Support
