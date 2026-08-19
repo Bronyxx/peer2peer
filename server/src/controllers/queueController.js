@@ -1,10 +1,7 @@
-const {
-  addToQueue,
-} = require("../services/queueService");
+const {addToQueue} = require("../services/queueService");
 
-const {
-  tryMatch,
-} = require("../services/matchmakingService");
+const {tryMatch} = require("../services/matchMakingService");
+const metrics = require("../store/metricStore.js");
 
 function handleJoinQueue(
   io,
@@ -26,6 +23,9 @@ function handleJoinQueue(
     tryMatch();
 
   if (!match) return;
+  console.log("before metrics.attempts:", metrics.attempts);
+  metrics.attempts++;
+  console.log("after metrics.attempts:", metrics.attempts);
   //room join 
   const seekerSocket =
   io.sockets.sockets.get(
@@ -36,6 +36,8 @@ const listenerSocket =
   io.sockets.sockets.get(
     match.listener
   );
+  console.log("match object:", JSON.stringify(match));
+ console.log("typeof match.seeker:", typeof match.seeker);
 
 seekerSocket.join(
   match.sessionId

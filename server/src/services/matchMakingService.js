@@ -1,5 +1,5 @@
 const crypto = require("crypto");
-
+const metrics=require("../store/metricStore.js")
 const {
   seekers,
   listeners,
@@ -25,6 +25,17 @@ console.log("Listeners:", listeners);
 
   const sessionId =
     crypto.randomUUID();
+    const latency =Date.now() -Math.min(seeker.joinedAt,listener.joinedAt);
+    console.log("Before matchmaking", metrics.matchmakingCount,metrics.totalMatchmakingLatency);
+    metrics.matchmakingCount++;
+    metrics.totalMatchmakingLatency += latency;
+    console.log("after matchmaking", metrics.matchmakingCount,metrics.totalMatchmakingLatency);
+
+console.log(
+  "Matchmaking latency:",
+  latency,
+  "ms"
+);
 
   sessions.set(sessionId, {
     seeker,
@@ -33,8 +44,8 @@ console.log("Listeners:", listeners);
 
   return {
     sessionId,
-    seeker,
-    listener,
+    seeker: seeker.socketId,
+    listener: listener.socketId,
   };
 }
 

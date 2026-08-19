@@ -1,0 +1,13 @@
+config:
+  target: "https://peer2peer-4rpi.onrender.com"
+  phases:
+    - duration: 60
+      arrivalRate: 10
+
+scenarios:
+  - engine: socketio
+    flow:
+      - emit:
+          channel: "join-queue"
+          data:
+            role: "seeker"
