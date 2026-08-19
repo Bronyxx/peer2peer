@@ -49,9 +49,8 @@ const createPeer = () => {
 
     console.log("REMOTE TRACK RECEIVED");
 
-    remoteVideoRef.current.srcObject =
-      event.streams[0];
-      setRemoteStream(event.streams[0]);
+    stream =event.streams[0];
+      setRemoteStream(stream);
 
   };
 
@@ -174,6 +173,11 @@ setSessionStats({
       role: "listener",
     });
   };
+  useEffect(()=>{
+     if(remoteStream && remoteVideoRef.current){
+      remoteVideoRef.current.srcObject=remoteStream;
+     }
+  },[])
 
    useEffect(()=>{
     sessionIdRef.current = sessionId;
