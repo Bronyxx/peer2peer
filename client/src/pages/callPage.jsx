@@ -332,45 +332,52 @@ socket.on("connect_error", err => {
    return (
     <>
 <div className="video-container">
-     {!remoteStream? ( <video
-     ref={videoRef}
-     autoPlay
-     playsInline
-     muted
-     className="local-video-large"
-     
-    />):  
-    <>
-     <video
-     ref={videoRef}
-     autoPlay
-     playsInline
-     muted
-     className="local-video-small"
-    />
-    <video
-      ref={remoteVideoRef}
-      autoPlay
-      playsInline
-       className="remote-video"
-    /> 
-    </>
-    } 
-     
 
-
-
-   
-  
-</div>
- <button
-    className="resize-button"
-    onClick={() =>
-      setIsLocalExpanded(prev => !prev)
+    {/* Remote video */}
+  <video
+    ref={remoteVideoRef}
+    autoPlay
+    playsInline
+    className={
+      !remoteStream
+        ? "remote-video hidden"
+        : isLocalExpanded
+        ? "remote-video-small"
+        : "remote-video"
     }
-  >
-    ⛶
-  </button>
+  />
+
+   {/* Local video */}
+  <video
+    ref={videoRef}
+    autoPlay
+    playsInline
+    muted
+    className={
+      !remoteStream
+        ? "local-video-large"
+        : isLocalExpanded
+        ? "local-video-large"
+        : "local-video-small"
+    }
+  />
+
+   {/* Resize / swap button */}
+  {remoteStream && (
+    <button
+      className="resize-button"
+      onClick={() =>
+        setIsLocalExpanded(prev => !prev)
+      }
+    >
+      ⛶
+    </button>
+  )}
+
+
+
+    
+</div>
 
       <button onClick={joinAsSeeker}
        disabled={status !== "idle" && status !== "ended"}>

@@ -1,34 +1,72 @@
 .video-container {
-    position: relative;
-    width: 100%;
-    height: 100vh;
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
 }
 
-/* Before remote joins */
-.local-video-large {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-/* Remote video becomes the main video */
+/* REMOTE MAIN */
 .remote-video {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
-/* Local video becomes small */
+/* REMOTE SMALL */
+.remote-video-small {
+  position: absolute;
+  right: 20px;
+  bottom: 20px;
+
+  width: 220px;
+  height: 140px;
+
+  object-fit: cover;
+  border-radius: 12px;
+
+  z-index: 5;
+}
+
+/* LOCAL MAIN */
+.local-video-large {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* LOCAL SMALL */
 .local-video-small {
-    position: absolute;
-    width: 220px;
-    height: 140px;
+  position: absolute;
+  right: 20px;
+  bottom: 20px;
 
-    right: 20px;
-    bottom: 20px;
+  width: 220px;
+  height: 140px;
 
-    object-fit: cover;
-    border-radius: 12px;
+  object-fit: cover;
+  border-radius: 12px;
 
-    z-index: 10;
+  z-index: 5;
+}
+
+/* Hide remote before call */
+.hidden {
+  display: none;
+}
+
+/* Resize button */
+.resize-button {
+  position: absolute;
+  right: 30px;
+  bottom: 30px;
+
+  width: 36px;
+  height: 36px;
+
+  z-index: 20;
+
+  border: none;
+  border-radius: 8px;
+
+  cursor: pointer;
 }
