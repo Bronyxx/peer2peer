@@ -19,6 +19,7 @@ import "./callPage.css";
    const matchTimerRef = useRef(null);
    const sessionIdRef = useRef(null);
    const [isLocalExpanded, setIsLocalExpanded] = useState(false);
+   const [remoteStream , setRemoteStream]=useState(null);
 
 //new peer connection
 const createPeer = () => {
@@ -50,6 +51,7 @@ const createPeer = () => {
 
     remoteVideoRef.current.srcObject =
       event.streams[0];
+      setRemoteStream(event.streams[0]);
 
   };
 
@@ -326,22 +328,36 @@ socket.on("connect_error", err => {
    return (
     <>
 <div className="video-container">
-    // user camera
-    <video
+     {!remoteStream? ( <video
      ref={videoRef}
      autoPlay
      playsInline
      muted
-     className={isLocalExpanded? "local-video expanded" : "local-video"}
+     className="local-video-large"
      
+    />):  
+    <>
+     <video
+     ref={videoRef}
+     autoPlay
+     playsInline
+     muted
+     className="local-video-small"
     />
-    // remote camera
     <video
       ref={remoteVideoRef}
       autoPlay
       playsInline
        className="remote-video"
-    />
+    /> 
+    </>
+    } 
+     
+
+
+
+   
+  
 </div>
  <button
     className="resize-button"
