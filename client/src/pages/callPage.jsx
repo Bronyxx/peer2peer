@@ -177,7 +177,7 @@ setSessionStats({
      if(remoteStream && remoteVideoRef.current){
       remoteVideoRef.current.srcObject=remoteStream;
      }
-  },[])
+  },[remoteStream])
 
    useEffect(()=>{
     sessionIdRef.current = sessionId;
