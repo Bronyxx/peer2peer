@@ -49,7 +49,7 @@ const createPeer = () => {
 
     console.log("REMOTE TRACK RECEIVED");
 
-    stream =event.streams[0];
+   const  stream =event.streams[0];
       setRemoteStream(stream);
 
   };
