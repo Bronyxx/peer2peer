@@ -1,4 +1,4 @@
-import styles from './LandingPage.module.css';
+import styles from './landingPage.css';
 
 export default function LandingPage({
   onContinue,
