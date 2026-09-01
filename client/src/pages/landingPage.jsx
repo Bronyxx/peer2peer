@@ -1,47 +1,44 @@
+import styles from './LandingPage.module.css';
+
 export default function LandingPage({
   onContinue,
 }) {
   return (
-    <div>
-      <h1>Peer Support</h1>
+    <div className={styles.page}>
+      <div className={styles.card}>
+        <h1 className={styles.title}>Peer Support</h1>
 
-      <p>
-        Anonymous peer-to-peer
-        emotional support.
-      </p>
+        <p className={styles.subtitle}>
+          Anonymous peer-to-peer emotional support.
+        </p>
 
-      <h2>
-        Important Notice
-      </h2>
+        <div className={styles.notice}>
+          <h2>Important Notice</h2>
 
-      <p>
-        Peer Support is not an
-        emergency service.
-      </p>
+          <p>Peer Support is not an emergency service.</p>
 
-      <p>
-        If you are in immediate
-        danger or experiencing a
-        medical emergency, please
-        contact local emergency
-        services.
-      </p>
+          <p>
+            If you are in immediate danger or experiencing a
+            medical emergency, please contact local emergency
+            services.
+          </p>
+        </div>
 
-      <ul>
-        <li>
-          Emergency: 112
-        </li>
+        <ul className={styles.panel}>
+          <li>
+            <span>Emergency</span>
+            <span>112</span>
+          </li>
+          <li>
+            <span>Ambulance</span>
+            <span>108</span>
+          </li>
+        </ul>
 
-        <li>
-          Ambulance: 108
-        </li>
-      </ul>
-
-      <button
-        onClick={onContinue}
-      >
-        I Understand
-      </button>
+        <button className={styles.button} onClick={onContinue}>
+          I Understand
+        </button>
+      </div>
     </div>
   );
 }

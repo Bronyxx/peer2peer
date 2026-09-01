@@ -1,0 +1,115 @@
+:root {
+  --color-bg: #F5F6F4;
+  --color-card: #FFFFFF;
+  --color-border: #E2E5E1;
+  --color-accent: #3D6B5C;
+  --color-heading: #1C2620;
+  --color-body: #3F4A44;
+  --color-muted: #5B6660;
+  --color-panel: #F2F4F2;
+  --color-button: #1C2620;
+  --color-button-hover: #28352D;
+}
+
+.page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-bg);
+  font-family: 'Inter', sans-serif;
+  padding: 20px;
+}
+
+.card {
+  width: 100%;
+  max-width: 480px;
+  background: var(--color-card);
+  border: 1px solid var(--color-border);
+  border-radius: 16px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  padding: 40px;
+}
+
+.title {
+  font-family: 'Source Serif 4', serif;
+  font-size: 30px;
+  font-weight: 600;
+  color: var(--color-heading);
+  margin: 0 0 6px 0;
+}
+
+.subtitle {
+  color: var(--color-muted);
+  font-size: 15px;
+  margin: 0 0 32px 0;
+}
+
+.notice {
+  border-left: 2px solid var(--color-accent);
+  padding-left: 20px;
+  margin-bottom: 32px;
+}
+
+.notice h2 {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--color-heading);
+  margin: 0 0 12px 0;
+}
+
+.notice p {
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--color-body);
+  margin: 0 0 12px 0;
+}
+
+.notice p:last-child {
+  margin-bottom: 0;
+}
+
+.panel {
+  list-style: none;
+  background: var(--color-panel);
+  border-radius: 12px;
+  padding: 20px;
+  margin: 0 0 32px 0;
+}
+
+.panel li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 0;
+  font-size: 14px;
+}
+
+.panel li:first-child {
+  border-bottom: 1px solid var(--color-border);
+  padding-bottom: 12px;
+  margin-bottom: 6px;
+}
+
+.panel li::before {
+  content: attr(data-label);
+  color: var(--color-muted);
+}
+
+.button {
+  width: 100%;
+  background: var(--color-button);
+  color: #FFFFFF;
+  border: none;
+  border-radius: 10px;
+  padding: 14px;
+  font-size: 14px;
+  font-weight: 500;
+  font-family: 'Inter', sans-serif;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.button:hover {
+  background: var(--color-button-hover);
+}
