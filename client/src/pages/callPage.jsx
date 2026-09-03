@@ -22,13 +22,15 @@ import "./callPage.css";
    const [remoteStream , setRemoteStream]=useState(null);
 
 //new peer connection
-const createPeer = () => {
-
+const createPeer = async() => {
+    const response= await fetch("/api/turn-credentials")
+    const turnServers= await response.json()
   const peer = new RTCPeerConnection({
     iceServers: [
       {
-        urls: "stun:stun.l.google.com:19302",
+        urls: "stun:stun.l.google.com:19302",  
       },
+      ...turnServers
     ],
   });
 
@@ -232,7 +234,7 @@ useEffect(() => {
 
   const handleOffer = async (data) => {
 
-  const peer = createPeer();
+  const peer =  await createPeer();
 
   await peer.setRemoteDescription(
     data.offer
@@ -429,7 +431,7 @@ socket.on("connect_error", err => {
      <button
   onClick={async () => {
 
-   const peer = createPeer();
+   const peer = await createPeer();
 
     const offer =
       await peer.createOffer();
