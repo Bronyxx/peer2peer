@@ -23,7 +23,7 @@ import "./callPage.css";
 
 //new peer connection
 const createPeer = async() => {
-    const response= await fetch("${process.env.VITE_SERVER_URL}/api/turn-credentials")
+    const response= await fetch(`${import.meta.env.VITE_SERVER_URL}/api/turn-credentials`)
     const turnServers= await response.json()
   const peer = new RTCPeerConnection({
     iceServers: [
