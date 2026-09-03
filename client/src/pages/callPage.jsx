@@ -32,7 +32,6 @@ const createPeer = async() => {
       },
       ...turnServers
     ],
-    iceTransportPolicy : "relay",
   });
 
   peerRef.current = peer;
