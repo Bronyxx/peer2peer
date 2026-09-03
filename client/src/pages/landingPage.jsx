@@ -30,8 +30,8 @@ export default function LandingPage({
             <span>112</span>
           </li>
           <li>
-            <span>Ambulance</span>
-            <span>108</span>
+            <span>TELE-MANAS</span>
+            <span>14416</span>
           </li>
         </ul>
 
