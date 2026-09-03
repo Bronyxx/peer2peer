@@ -10,7 +10,7 @@ const { Server } =require("socket.io");
  const app = express();
  app.use(express.json());
 
-app.use(turnCredentialsRoute);
+
 const {registerSocketHandlers,} = require("./sockets/socketHandlers");
 
 app.get("/", (req, res) => {
@@ -39,6 +39,7 @@ const io = new Server(
     },
   }
 );
+app.use(turnCredentialsRoute);
 
 
 io.on(
