@@ -2,6 +2,7 @@ const express =require("express");
 
 const http = require("http");
 const metrics = require("./store/metricStore.js");
+const turnCredentialsRoute= require("./routes/TurnRoute.js")
 
 
 const { Server } =require("socket.io");
@@ -9,9 +10,8 @@ const { Server } =require("socket.io");
  const app = express();
  app.use(express.json());
 
-
+app.use(turnCredentialsRoute);
 const {registerSocketHandlers,} = require("./sockets/socketHandlers");
-
 
 app.get("/", (req, res) => {
   res.send("Peer Support Backend Running");

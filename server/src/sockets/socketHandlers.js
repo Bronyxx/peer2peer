@@ -1,31 +1,11 @@
-const {
-  handleJoinQueue,
-} = require(
-  "../controllers/queueController"
-);
-const {
-  findSessionBySocket
-} = require(
-  "../services/disconnectService"
-);
+const {handleJoinQueue,} = require("../controllers/queueController");
+const {findSessionBySocket} = require("../services/disconnectService");
 const {removeFromQueue}= require("../services/queueService.js");
 
-const {
-  sessions
-} = require(
-  "../store/sessionStore"
-);
-const {
- handleOffer,
- handleAnswer,
- handleIceCandidate,
- handleEndCall
-} = require("../controllers/signalingController");
+const {sessions} = require("../store/sessionStore");
+const {handleOffer,handleAnswer,handleIceCandidate,handleEndCall} = require("../controllers/signalingController");
 
-function registerSocketHandlers(
-  io,
-  socket
-) {
+function registerSocketHandlers(io,socket) {
 
   socket.on(
     "join-queue",
