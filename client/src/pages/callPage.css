@@ -3,20 +3,27 @@
   width: 100%;
   height: 100vh;
   overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #111;
 }
 
-/* REMOTE MAIN */
+/* REMOTE VIDEO - MAIN*/
+
 .remote-video {
-  width: 70%;
-  height: 70%;
+  width: 75%;
+  height: 75%;
   object-fit: cover;
+  border-radius: 16px;
 }
 
-/* REMOTE SMALL */
+/* REMOTE VIDEO - SMALL*/
+
 .remote-video-small {
   position: absolute;
-  right: 20px;
-  bottom: 20px;
+  left: 20px;
+  top: 20px;
 
   width: 220px;
   height: 140px;
@@ -27,16 +34,25 @@
   z-index: 5;
 }
 
-/* LOCAL MAIN */
+/* LOCAL VIDEO - MAIN */
+
 .local-video-large {
-  width: 70%;
-  height: 70%;
+  position: absolute;
+
+  width: 75%;
+  height: 75%;
+
   object-fit: cover;
+  border-radius: 16px;
+
+  z-index: 2;
 }
 
-/* LOCAL SMALL */
+/* LOCAL VIDEO - SMALL*/
+
 .local-video-small {
   position: absolute;
+
   right: 20px;
   bottom: 20px;
 
@@ -46,19 +62,22 @@
   object-fit: cover;
   border-radius: 12px;
 
-  z-index: 5;
+  z-index: 10;
 }
 
-/* Hide remote before call */
+/* HIDDEN*/
+
 .hidden {
   display: none;
 }
 
-/* Resize button */
+/*  RESIZE BUTTON*/
+
 .resize-button {
   position: absolute;
-  right: 30px;
-  bottom: 30px;
+
+  right: 20px;
+  bottom: 175px;
 
   width: 36px;
   height: 36px;
@@ -69,4 +88,51 @@
   border-radius: 8px;
 
   cursor: pointer;
+}
+
+/* MOBILE */
+
+@media (max-width: 600px) {
+
+  .video-container {
+    width: 100%;
+    height: 100dvh;
+  }
+
+  .remote-video {
+    width: 100%;
+    height: 100%;
+    border-radius: 0;
+  }
+
+  .local-video-small {
+    width: 110px;
+    height: 150px;
+
+    right: 12px;
+    bottom: 80px;
+
+    border-radius: 10px;
+  }
+
+  .local-video-large {
+    width: 100%;
+    height: 100%;
+    border-radius: 0;
+  }
+
+  .remote-video-small {
+    width: 110px;
+    height: 150px;
+
+    left: 12px;
+    top: 80px;
+
+    border-radius: 10px;
+  }
+
+  .resize-button {
+    right: 12px;
+    bottom: 25px;
+  }
 }
