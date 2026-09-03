@@ -260,6 +260,7 @@ useEffect(() => {
 };
 
  const handleAnswer = async (data) => {
+  if(!peerRef.current) return;
 
   await peerRef.current
     .setRemoteDescription(
