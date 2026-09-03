@@ -1,5 +1,5 @@
-const express= requires("express")
-const router= express.router()
+const express= require("express")
+const router= express.Router()
 
 router.get('/api/turn-credentials',async(req,res)=>{
     try{
@@ -8,7 +8,7 @@ router.get('/api/turn-credentials',async(req,res)=>{
     );
 
     if(!response.ok){
-        throw new Error("failed to fetch turn credentials${response.status}")
+        throw new Error(`failed to fetch turn credentials ${response.status}`)
     }
     const iceServers= await response.json()
     res.json(iceServers)
@@ -18,5 +18,4 @@ router.get('/api/turn-credentials',async(req,res)=>{
     res.status(500).json({ error: "Failed to fetch turn credentials" });
 }
 })
-
-export default router
+ module.exports=router
