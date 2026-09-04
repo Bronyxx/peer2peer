@@ -9,7 +9,7 @@ export default function LandingPage({
         <h1 className={styles.title}>Peer Support</h1>
 
         <p className={styles.subtitle}>
-          Anonymous peer-to-peer emotional support.
+          Anonymous peer-to-peer  support.
         </p>
 
         <div className={styles.notice}>
