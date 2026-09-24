@@ -27,6 +27,12 @@ export default function CallPage() {
   const statsIntervalRef = useRef(null);
   const hasLoggedConnectTimeRef = useRef(false);
 
+  // METRICS: accumulates matchmaking latency across every join-queue -> match-found
+  // cycle this tab sees, so you don't have to average console logs by hand.
+  // Rejoin the queue a few times in the same tab (or across tabs) and check
+  // window.__matchmakingStats() at any point.
+  const matchmakingLatenciesRef = useRef([]);
+
   // METRICS: run once, right after connectionState hits "connected".
   // Tells you whether you actually got P2P (host/srflx) or fell back to TURN (relay),
   // plus current RTT/jitter/packet loss.
@@ -242,8 +248,31 @@ export default function CallPage() {
       console.log("Matchmaking Latency:", latency, "ms");
       console.log("MATCH FOUND:", data);
 
+      // METRICS: append this run's latency and log the running average so far.
+      matchmakingLatenciesRef.current.push(latency);
+      const runs = matchmakingLatenciesRef.current;
+      const avg = runs.reduce((sum, n) => sum + n, 0) / runs.length;
+      console.log(
+        `[METRICS] Matchmaking run #${runs.length}: ${latency}ms | avg so far: ${avg.toFixed(0)}ms`
+      );
+
       setSessionId(data.sessionId);
       setStatus("matched");
+    };
+
+    // METRICS: call window.__matchmakingStats() from the console any time to see
+    // every run so far plus min/max/avg, without digging through log history.
+    window.__matchmakingStats = () => {
+      const runs = matchmakingLatenciesRef.current;
+      if (runs.length === 0) {
+        console.log("[METRICS] No matchmaking runs recorded yet.");
+        return;
+      }
+      const avg = runs.reduce((sum, n) => sum + n, 0) / runs.length;
+      console.log(`[METRICS] Runs: [${runs.join(", ")}]ms`);
+      console.log(
+        `[METRICS] count: ${runs.length}, avg: ${avg.toFixed(0)}ms, min: ${Math.min(...runs)}ms, max: ${Math.max(...runs)}ms`
+      );
     };
 
     socket.on("match-found", handleMatch);
