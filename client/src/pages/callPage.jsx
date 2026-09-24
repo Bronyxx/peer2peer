@@ -19,6 +19,56 @@ export default function CallPage() {
   const [isLocalExpanded, setIsLocalExpanded] = useState(false);
   const [remoteStream, setRemoteStream] = useState(null);
 
+  // METRICS: timing + stats state for resume data collection.
+  // callStartTimeRef marks the moment THIS peer initiated connection
+  // (button click for the offerer, offer-received for the answerer).
+  const callStartTimeRef = useRef(null);
+  const iceGatherStartRef = useRef(null);
+  const statsIntervalRef = useRef(null);
+  const hasLoggedConnectTimeRef = useRef(false);
+
+  // METRICS: run once, right after connectionState hits "connected".
+  // Tells you whether you actually got P2P (host/srflx) or fell back to TURN (relay),
+  // plus current RTT/jitter/packet loss.
+  const logConnectionStats = async () => {
+    const peer = peerRef.current;
+    if (!peer) return;
+
+    const stats = await peer.getStats();
+    stats.forEach((report) => {
+      if (report.type === "candidate-pair" && report.state === "succeeded") {
+        const local = stats.get(report.localCandidateId);
+        const remote = stats.get(report.remoteCandidateId);
+        console.log(
+          `[METRICS] candidate pair -> local: ${local?.candidateType}, remote: ${remote?.candidateType}, RTT: ${report.currentRoundTripTime}s`
+        );
+      }
+      if (report.type === "inbound-rtp" && report.kind === "video") {
+        console.log(
+          `[METRICS] video inbound -> packetsLost: ${report.packetsLost}, jitter: ${report.jitter}`
+        );
+      }
+    });
+  };
+
+  // METRICS: poll every 5s while connected so you catch mid-call degradation too,
+  // not just the first snapshot.
+  const startStatsPolling = () => {
+    stopStatsPolling();
+    statsIntervalRef.current = setInterval(() => {
+      if (peerRef.current?.connectionState === "connected") {
+        logConnectionStats();
+      }
+    }, 5000);
+  };
+
+  const stopStatsPolling = () => {
+    if (statsIntervalRef.current) {
+      clearInterval(statsIntervalRef.current);
+      statsIntervalRef.current = null;
+    }
+  };
+
   // new peer connection
   const createPeer = async () => {
     const response = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/turn-credentials`);
@@ -33,6 +83,10 @@ export default function CallPage() {
     });
 
     peerRef.current = peer;
+
+    // METRICS: reset per-call flags/timers on every new peer connection.
+    hasLoggedConnectTimeRef.current = false;
+    iceGatherStartRef.current = performance.now();
 
     // Add local tracks
     localStreamRef.current
@@ -58,18 +112,38 @@ export default function CallPage() {
       });
     };
 
+    // METRICS: how long candidate gathering itself takes, separate from full connect time.
+    peer.onicegatheringstatechange = () => {
+      if (peer.iceGatheringState === "complete" && iceGatherStartRef.current) {
+        const elapsed = ((performance.now() - iceGatherStartRef.current) / 1000).toFixed(2);
+        console.log(`[METRICS] ICE gathering complete in ${elapsed}s`);
+      }
+    };
+
     peer.onconnectionstatechange = () => {
       console.log("Connection State:", peer.connectionState);
       window.__webrtcState = peer.connectionState;
       console.log("ICE State:", peer.iceConnectionState);
 
       if (peer.connectionState === "failed" || peer.connectionState === "closed") {
+        // METRICS: explicit failure log so you can count failures across your 8-10 test runs.
+        console.log("[METRICS] connection FAILED/CLOSED before establishing");
+        stopStatsPolling();
         cleanupCall("connection lost");
       }
       if (peer.connectionState === "connected") {
         socket.emit("call-connected", {
           sessionId: sessionIdRef.current,
         });
+
+        // METRICS: log time-to-connect exactly once per call, then start snapshotting stats.
+        if (!hasLoggedConnectTimeRef.current && callStartTimeRef.current) {
+          hasLoggedConnectTimeRef.current = true;
+          const elapsed = ((performance.now() - callStartTimeRef.current) / 1000).toFixed(2);
+          console.log(`[METRICS] ✅ Connected in ${elapsed}s`);
+        }
+        logConnectionStats();
+        startStatsPolling();
       }
     };
 
@@ -86,6 +160,8 @@ export default function CallPage() {
 
   // end call
   const cleanupCall = (reason) => {
+    stopStatsPolling(); // METRICS: stop polling so it doesn't run against a closed connection
+
     if (peerRef.current) {
       peerRef.current.close();
       peerRef.current = null;
@@ -174,6 +250,9 @@ export default function CallPage() {
   // socket event listeners for signalling
   useEffect(() => {
     const handleOffer = async (data) => {
+      // METRICS: for the answerer, "call start" is the moment the offer lands, not a button click.
+      callStartTimeRef.current = performance.now();
+
       const peer = await createPeer();
 
       await peer.setRemoteDescription(data.offer);
@@ -309,6 +388,9 @@ export default function CallPage() {
         <button
           className="start-call-button"
           onClick={async () => {
+            // METRICS: for the offerer, "call start" is this button click.
+            callStartTimeRef.current = performance.now();
+
             const peer = await createPeer();
 
             const offer = await peer.createOffer();
