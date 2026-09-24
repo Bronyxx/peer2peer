@@ -36,11 +36,17 @@ export default function CallPage() {
 
     const stats = await peer.getStats();
     stats.forEach((report) => {
-      if (report.type === "candidate-pair" && report.state === "succeeded") {
+      // METRICS: only the nominated pair is actually carrying media right now;
+      // other "succeeded" pairs are ICE history, not the active route.
+      if (
+        report.type === "candidate-pair" &&
+        report.state === "succeeded" &&
+        report.nominated
+      ) {
         const local = stats.get(report.localCandidateId);
         const remote = stats.get(report.remoteCandidateId);
         console.log(
-          `[METRICS] candidate pair -> local: ${local?.candidateType}, remote: ${remote?.candidateType}, RTT: ${report.currentRoundTripTime}s`
+          `[METRICS] ACTIVE pair -> local: ${local?.candidateType}, remote: ${remote?.candidateType}, RTT: ${report.currentRoundTripTime}s`
         );
       }
       if (report.type === "inbound-rtp" && report.kind === "video") {
